@@ -4,7 +4,7 @@ import {Card, CardBody, CardImg, CardTitle, CardText} from 'reactstrap';
 export default class DishdetailComponent extends Component {
     constructor(props){
         super(props)
-        this.state = {
+        this.state = { 
 
         }
     }
@@ -19,6 +19,7 @@ export default class DishdetailComponent extends Component {
         }
         else{
             return(
+            
             <div className="row">
                 
                 <div className="col-12 col-md-6 mt-3  ">
@@ -40,7 +41,7 @@ export default class DishdetailComponent extends Component {
                             <h5>By : {comment.author}</h5>
                             </div>
                             <div className="col-6">
-                            <h5>Time : {comment.date}</h5>
+                                <h5>Time : {new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'2-digit'}).format(new Date(Date.parse(comment.date)))}</h5>                            
                             </div>
                             <br/>
                         </div>
@@ -59,8 +60,8 @@ export default class DishdetailComponent extends Component {
     render() {
         
         return (
-            <div>
-                {this.renderSelectedDish(this.props.selectedDish)}
+            <div className="container">
+                {this.renderSelectedDish(this.props.dish)}
             </div>
         )
     }
