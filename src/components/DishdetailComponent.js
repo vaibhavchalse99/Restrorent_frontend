@@ -1,59 +1,74 @@
 import React from 'react'
-import {Card, CardBody, CardImg, CardTitle, CardText} from 'reactstrap';
+import {Card, CardBody, CardImg, CardTitle, CardText, Breadcrumb, BreadcrumbItem} from 'reactstrap';
+import {Link} from 'react-router-dom';
 
-const Comment = ({comment})=>{
+const RenderDish = ({dish})=>{
     return(
-    <div key={comment.id}>
-        <h4 className="text-primary">{comment.comment}</h4>
-        <div className="row">
-            <div className="col-6">
-            <h5>By : {comment.author}</h5>
-            </div>
-            <div className="col-6">
-                <h5>Time : {new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'2-digit'}).format(new Date(Date.parse(comment.date)))}</h5>                            
-            </div>
-            <br/>
+        <div className="col-12 col-md-6 mt-3  ">
+            <Card >
+                <CardImg width="100%" src={dish.image} alt="Card image cap" />
+                <CardBody>
+                <CardTitle className="text-success">{dish.name}</CardTitle>
+                <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card>     
         </div>
-    </div>
     )
 }
 
-const RenderSelectedDish = ({dish})=>{
-    if(dish == null){
-        return(
-            <div></div>
-        )
-    }
-    else{
-        return(
-        <div className="row">
-            <div className="col-12 col-md-6 mt-3  ">
-                <Card >
-                    <CardImg width="100%" src={dish.image} alt="Card image cap" />
-                    <CardBody>
-                    <CardTitle className="text-success">{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>     
-            </div>
-            <div className="col-12 col-md-6 mt-3">
+const RenderComment = ({comments})=>{
+    return(
+        <div className="col-12 col-md-6 mt-3">
             <h1>Comments</h1>
-            {dish.comments.map((comment) => (
-                <Comment comment = {comment}/>    
-            ))}
-            </div>
+            {comments.map(comment =>{
+                return(
+                    <div key={comment.id}>
+                        <h4 className="text-primary">{comment.comment}</h4>
+                        <div className="row">
+                            <div className="col-6">
+                            <h5>By : {comment.author}</h5>
+                            </div>
+                            <div className="col-6">
+                                <h5>Time : {new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'2-digit'}).format(new Date(Date.parse(comment.date)))}</h5>                            
+                            </div>
+                            <br/>
+                        </div>
+                    </div>
+                )
+            })}
         </div>
-        )
-    }
+    )
 }
 
 
 const Dishdetail = (props)=>{
-    return (
-        <div className="container">
-            <RenderSelectedDish dish = {props.dish} />
-        </div>
-    )
+    if(props.dish != null){
+        return (
+            <div className="container">
+                <div className="row">
+                    <Breadcrumb>
+                        <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{props.dish.name}</h3>
+                        <hr />
+                    </div>                
+                </div>
+                <div className="row">
+                    <RenderDish dish = {props.dish}/>
+                    <RenderComment comments = {props.comments}/>
+                </div>
+                
+            </div>
+        )
+    }
+    else{
+        return(
+            <div></div>
+        )
+    }
+    
 }
 
 export default Dishdetail;
