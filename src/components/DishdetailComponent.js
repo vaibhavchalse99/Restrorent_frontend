@@ -36,7 +36,7 @@ class CommentForm extends Component {
     }
     handleForm(value){
         console.log(JSON.stringify(value))
-        this.props.addComment(this.props.dishId, value.rating, value.author, value.comment)
+        this.props.postComment(this.props.dishId, value.rating, value.author, value.comment)
     }
 
     toggleModel(){
@@ -113,7 +113,7 @@ class CommentForm extends Component {
     }
 }
 
-const RenderComment = ({comments, addComment, dishId})=>{
+const RenderComment = ({comments, postComment, dishId})=>{
     return(
         <div className="col-12 col-md-6 mt-3">
             <h1>Comments</h1>
@@ -133,7 +133,7 @@ const RenderComment = ({comments, addComment, dishId})=>{
                     </div>
                 )
             })}
-            <CommentForm dishId = {dishId} addComment = {addComment}/>
+            <CommentForm dishId = {dishId} postComment = {postComment}/>
             </div>
     )
 }
@@ -174,7 +174,7 @@ const Dishdetail = (props)=>{
                 <div className="row">
                     <RenderDish dish = {props.dish}/>
                     <RenderComment comments = {props.comments}
-                    addComment = {props.addComment}
+                    postComment = {props.postComment}
                     dishId = {props.dish.id}/>
                 </div>
                 
