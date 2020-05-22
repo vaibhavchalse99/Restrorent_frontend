@@ -45,9 +45,20 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
 
 
 export const postFeedback = (feedbackObject) => (dispatch)=>{
+    var newObj = {
+        firstname:feedbackObject.firstname,
+        lastname:feedbackObject.lastname,
+        telnum:feedbackObject.telnum,
+        email:feedbackObject.email,
+        agree:feedbackObject.agree,
+        contactType:feedbackObject.contactType,
+        message:feedbackObject.message,
+    }
+    newObj.date = new Date().toISOString();
+
     return fetch(baseUrl + 'feedback', {
         method: "POST",
-        body: feedbackObject,
+        body: JSON.stringify(newObj),
         headers: {
           "Content-Type": "application/json"
         },
