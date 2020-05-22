@@ -1,6 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import {DISHES} from '../shared/dishes';
 import {baseUrl} from '../shared/baseUrl';
+import { actionTypes } from 'react-redux-form';
 
 export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
@@ -43,6 +44,34 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
 };
 
 
+export const postFeedback = (feedbackObject) => (dispatch)=>{
+    return fetch(baseUrl + 'feedback', {
+        method: "POST",
+        body: feedbackObject,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error('Error ' + response.status + ': ' + response.statusText);
+          error.response = response;
+          throw error;
+        }
+      },
+      error => {
+            throw error;
+      })
+    .then(response => response.json())
+    .then(response => {alert(JSON.stringify(response))})
+    .catch(error =>  { console.log('post comments', error.message); alert('Your comment could not be posted\nError: '+error.message); });
+
+}
+
+
 
 
 export const fetchDishes = () =>(dispatch)=>{
@@ -82,6 +111,10 @@ export const addDishes = (dish)=>({
 })
 
 
+
+
+
+
 export const fetchComments = () =>(dispatch)=>{
     
     return fetch(baseUrl+'comments')
@@ -112,6 +145,7 @@ export const addComments = (comments)=>({
     type:ActionTypes.ADD_COMMENTS,
     payload:comments
 })
+
 
 
 export const fetchPromos = () =>(dispatch)=>{
@@ -148,4 +182,44 @@ export const promosFailed = (errormessage)=>({
 export const addPromos = (promos)=>({
     type:ActionTypes.ADD_PROMOS,
     payload:promos
+})
+
+
+
+
+
+export const fetchLeaders = () =>(dispatch)=>{
+    dispatch(leadersLoading(true))
+
+    fetch(baseUrl+'leaders')
+    .then(response=>{
+        if(response.ok){
+            return response
+        }
+        else{
+            var err = new Error(`Error ${response.status} : ${response.statusText}`)
+            err.response = response
+            throw err
+        }
+    },err=>{
+        var errMess = new Error(err.message);
+        throw errMess;
+    })
+    .then(response=>response.json())
+    .then(leaders => dispatch(addLeaders(leaders)))
+    .catch(error=>dispatch(leadersFailed(error.message)))
+}
+
+export const leadersLoading = ()=>({
+    type:ActionTypes.LEADERS_LOADING
+})
+
+export const leadersFailed = (errorMessage)=>({
+    type:ActionTypes.LEADERS_FAILED,
+    payload:errorMessage
+})
+
+export const addLeaders = (leaders)=>({
+    type:ActionTypes.ADD_LEADERS,
+    payload:leaders
 })
